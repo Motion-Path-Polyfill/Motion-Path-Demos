@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+
+<body bgcolor='black'>
+  <div id="container">
+
+  </div>
+
+  <script>
+    
+    // Returns the number of pixels (n) in the form of a string
+    function pixels(n) {
+      return '' + n + 'px';
+    }
+    
+    // Returns a random int between min (included) and max (excluded)
+    function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min)) + min;
+    }
+    
+    // Returns an integer to be used as an x co-ordinate in the path
+    function bezierX() {
+      return getRandomInt(-250, 250);
+    }
+
+    // Returns an integer to be used as a y co-ordinate in the path
+    function bezierY() {
+      return getRandomInt(-150, -100);
+    }
+
+
+    // Returns a randomly generated path
+    function generatePath() {
+      var result = 'path("m0,0 v-1'
+      var numCurves = getRandomInt(4, 6);
+      
+      // Generating a Bezier curve https://www.w3.org/TR/SVG/paths.html#PathDataQuadraticBezierCommands
+      for (var i=0; i<numCurves;++i) {
+        result += ' t' + bezierX() + ',' + bezierY();
+      }
+
+      result += '")';
+      return result;
+    }
+
+    var colours = ['Lime', 
+                   'Yellow', 
+                   'DeepPink', 
+                   'Aqua', 
+                   'OrangeRed', 
+                   'BlueViolet', 
+                   'Goldenrod', 
+                   'Red', 
+                   'Blue', 
+                   'Snow'];
+
+    // Launches a firework and arranges for another to be launched later
+    function launch() {
+      
+      var duration = getRandomInt(700,1000);
+
+      var hub = document.createElement('div');
+      hub.style.position = 'absolute';
+      hub.style.left = pixels(getRandomInt(200, 1200));
+      hub.style.top = pixels(900);
+      container.appendChild(hub);
+        
+      var path = generatePath();
+      var timing = {
+                      duration: duration, 
+                      iterations: 1, 
+                      fill: "forwards", 
+                      easing: "ease-out",
+                   };
+
+      var keyframes = [
+              {
+                motionPath: path,
+                offset: 0, 
+                offsetDistance: '0%',
+              },
+              {
+                motionPath: path,
+                offset: 1, 
+                offsetDistance: '100%',
+              }];
+      hub.animate(keyframes, timing);
+        
+      var explodeDuration = getRandomInt(500, 1000);
+      var explosionRadius = getRandomInt(50, 200);
+      var numChildren = getRandomInt(8, 20);
+      var fireworkColour = colours[getRandomInt(0,10)];
+        
+      for (var j=0; j<numChildren;++j) {
+        var child = document.createElement('div');
+        child.style.position = 'absolute';
+        child.style.backgroundColor = fireworkColour;
+        child.style.width = pixels(2);
+        child.style.height = pixels(2);
+        child.style.borderRadius = '50%';
+        child.style.boxShadow = '0 0 5px 5px '+ child.style.backgroundColor +'';
+
+        hub.appendChild(child);
+
+        var keyframes = [
+                {
+                  transform: 'rotate('+ 360/numChildren * j + 'deg) translate(0,0)', 
+                  opacity: 1
+                },
+                {
+                  transform: 'rotate('+ 360/numChildren * j + 'deg) translate('+ explosionRadius +'px,0)', 
+                  opacity: 0.05
+                }];
+
+        var timing = {
+                        duration: explodeDuration, 
+                        fill: "forwards", 
+                        delay: duration - 200
+                      };
+        child.animate(keyframes, timing);
+      }
+      setTimeout(launch, getRandomInt(1, 15) * getRandomInt(10, 150));  
+    }
+    // Start the animation
+    window.onload = launch;
+  
+  </script>
+</body>
