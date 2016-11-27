@@ -1,0 +1,33 @@
+button {
+  background-color: transparent;
+  color: white;
+}
+
+body {
+  position: relative;
+  top: 50px;
+  text-align: center;
+  font-family: sans-serif;
+  color: white;
+  background-color: black;
+}
+
+.circle {
+  position: absolute;
+  background-color: pink;
+  color: white;
+  width: 1em;
+  height: 1em;
+  border-radius: 1em;
+}
+
+.rotater {
+  position: absolute;
+  left: calc((100vw - 200px) / 2); /* 100vw refers to the horizontal length of the screen */
+  top: calc((100vh - 400px) / 2); /* 100vh refers to the vertical legnth of the screen */
+  
+  /*left: calc((100vw - 200px) / 2); /* 100vw refers to the horizontal length of the screen */
+  /*top: calc((100vh - 400px) / 2); /* 100vh refers to the vertical legnth of the screen */
+  width: 200px;
+  height: 400px;
+}
